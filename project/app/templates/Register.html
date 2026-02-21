@@ -1,0 +1,138 @@
+{% extends "home.html" %}
+
+{% block title %}
+<title>Registration Page</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Registration Form</h4>
+                </div>
+
+                <div class="card-body">
+                    <form action="{% url 'Register' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" name="name" value="{{data.name}}" placeholder="Enter name">
+                    </div>
+                    {{msg}}
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" value="{{data.email}}" placeholder="Enter email">
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="mb-3">
+                        <label class="form-label">contact</label>
+                        <input type="number" class="form-control" name="contact" value="{{data.contact}}" placeholder="Enter contact number">
+                    </div>
+
+                        <!-- City -->
+                        <div class="mb-3">
+                            <label class="form-label">City</label>
+                            <select class="form-select" name="City">
+                                <option selected disabled>Select any one</option>
+                                <option value="Bhopal">Bhopal</option>
+                                <option value="Indore">Indore</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Mumbai">Mumbai</option>
+                            </select>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="Male">
+                                <label class="form-check-label">Male</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="Female">
+                                <label class="form-check-label">Female</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="Other">
+                                <label class="form-check-label">Other</label>
+                            </div>
+                        </div>
+                        <!-- Qualification -->
+                        <div class="mb-3">
+                            <label class="form-label">Qualification</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="qualification" value="10th">
+                                <label class="form-check-label">10th</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="qualification" value="12th">
+                                <label class="form-check-label">12th</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="qualification" value="UG">
+                                <label class="form-check-label">U.G.</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="qualification" value="pG">
+                                <label class="form-check-label">P.G.</label>
+                            </div>
+                        </div>
+
+                        
+                    {{pmsg}}
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="Enter password">
+                    </div>
+                    <!--Confirm Password -->
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" name="CPassword" placeholder="Enter Confirm password">
+                    </div>
+
+                        <!-- Profile Photo -->
+                        <div class="mb-3">
+                            <label class="form-label">Profile Photo</label>
+                            <input type="file" class="form-control" name="photo" accept=".png,.jpg">
+                        </div>
+
+                        <!-- Audio -->
+                        <div class="mb-3">
+                            <label class="form-label">Audio</label>
+                            <input type="file" class="form-control" name="audio" accept=".mp3">
+                        </div>
+
+                        <!-- Video -->
+                        <div class="mb-3">
+                            <label class="form-label">Video</label>
+                            <input type="file" class="form-control" name="video" accept=".mp4">
+                        </div>
+
+                        <!-- Resume -->
+                        <div class="mb-3">
+                            <label class="form-label">Resume</label>
+                            <input type="file" class="form-control" name="resume" accept=".pdf">
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                            Register
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+{% endblock content %}

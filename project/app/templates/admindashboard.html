@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <!-- ✅ Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            overflow:hidden;
+        }
+
+        .topbar{
+            height:70px;
+            background:#3f5873;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:0 25px;
+        }
+
+        .admin-info{
+            display:flex;
+            align-items:center;
+            gap:15px;
+        }
+
+        .admin-img{
+            width:45px;
+            height:45px;
+            border-radius:50%;
+            object-fit:cover;
+            border:2px solid white;
+        }
+
+        .main-layout{
+            display:flex;
+            height:calc(100vh - 70px);
+        }
+
+        .sidebar{
+            width:250px;
+            background:#4a637d;
+        }
+
+        .sidebar a{
+            display:block;
+            color:white;
+            padding:15px 20px;
+            text-decoration:none;
+            border-bottom:1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar a:hover{
+            background:#3b5168;
+        }
+
+        .content{
+            flex:1;
+            background:#f5f6f8;
+            padding:30px;
+            overflow:auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <div class="topbar">
+        <div class="admin-info">
+            <img src="{% static data.image %}" alt="Admin" class="admin-img">
+            <h5 class="mb-0">Welcome {{ data.name }}</h5>
+        </div>
+
+        <a href="{% url 'Logout' %}" class="text-info fw-bold text-decoration-none">
+            Logout
+        </a>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main-layout">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <a href="{% url 'add_dep' %}">Add Department</a>
+            <a href="{% url 'show_dep' %}">Show Department</a>
+            <a href="#">Add Employee</a>
+            <a href="#">Show Employee</a>
+            <a href="#">Employee Query</a>
+            <a href="#">Profile</a>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <h4 class="mb-3">Dashboard Content Area</h4>
+
+            <!-- ✅ Django Messages -->
+            {% if massages %}
+                {% for massage in massages %}
+                    <div class="alert alert-info">
+                        {{ massage }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- ===== ADD DEPARTMENT ===== -->
+            {% if add_dep %}
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Add Department
+                </div>
+
+                <div class="card-body">
+                    <form action="{% url 'save_dep' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Department Name</label>
+                            <input type="text" name="dep_name" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Department Description</label>
+                            <textarea name="dep_desc" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Department Head</label>
+                            <input type="text" name="dep_head" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== SHOW DEPARTMENT ===== -->
+            {% elif show_dep %}
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    Department List
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Head</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in departments %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ i.dep_name }}</td>
+                                <td>{{ i.dep_desc }}</td>
+                                <td>{{ i.dep_head }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- ✅ Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

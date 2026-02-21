@@ -137,15 +137,54 @@ def show_dep(req):
     else:
         return redirect('Login')
 
+def add_emp(req):
+    if 'a_data' in req.session:
+        a_data = req.session.get('a_data')
+        departments = Department.objects.all()
+        return render(req,'admindashboard.html',{'data':a_data , 'add_emp':True,'departments':departments})
+    else:
+        return redirect('Login')
+    
 
+def save_emp(req):
+    if 'a_data' in req.session:
+        if req.method == 'POST':
+        
+            en=req.POST.get('name')
+            ee=req.POST.get('email')    
+            ec=req.POST.get('contact')
+            ed=req.POST.get('dept')
+            ei=req.FILES.get('image')
+            eco=req.POST.get('code')
+
+            emp=Add_Employee.objects.filter(Email=ee)
+            if emp:
+                messages.warning(req,'Employee already exist')
+                a_data = req.session.get('a_data')
+                departments = Department.objects.all()
+                return render(req,'admindashboard.html',{'data':a_data , 'add_emp':True,'departments':departments})
+            else:
+                Add_Employee.objects.create(Name=en,Email=ee,Contact=ec,Dept=ed,Image=ei,Code=eco)
+                messages.success(req,'Employee created')
+                a_data= req.session.get('a_data')
+                departments = Department.objects.all()
+                return render(req,'admindashboard.html',{'data':a_data , 'add_emp':True,'departments':departments})
+    else:
+        return redirect('Login')
+
+def show_emp(req):
+    if 'a_data' in req.session:
+        a_data = req.session.get('a_data')
+        departments = Add_Employee.objects.all()
+        return render(req,'admindashboard.html',{'data':a_data , 'show_emp':True, 'departments':departments})
+    else:
+        return redirect('Login')
+    
 
 def Logout(req):
     if 'user_id' in req.session:
         req.session.flush()
     return render(req,'Login.html')
-
-
-
 
 def about(req):
     return render(req,'about.html')

@@ -70,22 +70,33 @@ def Login(req):
             }
             req.session['a_data']=a_data
             return redirect('admindashboard')
-            pass
         else:
-            user = Employee.objects.filter(Email=e)
-            if not user:
-                    msg='register first'
-                    return redirect('register')
+            employee=Add_Employee.objects.filter(Email=e)
+            if employee:
+                emp_data=Add_Employee.objects.get(Email=e)
+                if p==emp_data.Code:
+                    req.session['emp_id']=emp_data.id
+                    return redirect('empdashboard')
+                else:
+                    messages.warning(req,'Email & password did not match')
+                    return redirect('Login')
             else:
-                userdata=Employee.objects.get(Email=e)
-            if p==userdata.Password:
-                    req.session['user_id']=userdata.id
-                    return redirect('userdashboard')
-            else:
-                    msg='email & password did not match'
-                    return render(req,'Login.html',{'x':msg})
+                messages.warning(req,'Employee does not exist')
+                return redirect('Login')
+                #     user = Employee.objects.filter(Email=e)
+                # if not user:
+                #     msg='register first'
+                #     return redirect('register')
+                # else:
+                #         userdata=Employee.objects.get(Email=e)
+                # if p==userdata.Password:
+                #         req.session['user_id']=userdata.id
+                #         return redirect('userdashboard')
+                # else:
+                #         msg='email & password did not match'
+                #         return render(req,'Login.html',{'x':msg})
         
-    return render(req, 'Login.html')
+    return render(req,'Login.html')
 
 
 def userdashboard(req):
@@ -189,6 +200,20 @@ def show_emp(req):
     else:
         return redirect('Login')
     
+def empdashboard(req):
+    if 'emp_id' in req.session:
+        eid=req.session.get('emp_id')
+        emp_data=Employee.objects.get(id=eid)
+        return render(req,'empdashboard.html',{'data':emp_data})
+
+    else:
+        return redirect('Login')    
+
+def Profile(req):
+    return render(req,'empdashboard.html')
+
+
+
 
 def Logout(req):
     if 'user_id' in req.session:

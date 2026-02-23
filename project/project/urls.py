@@ -33,6 +33,9 @@ urlpatterns = [
     path('admindashboard/add_emp/',views.add_emp,name='add_emp'),
     path('admindashboard/save_emp/',views.save_emp,name='save_emp'),
     path('admindashboard/show_emp/',views.show_emp,name='show_emp'),
+    path('empdashboard/',views.empdashboard,name='empdashboard'),
+    path('empdashboard/Profile/',views.Profile,name='Profile'),
+
 
 
 

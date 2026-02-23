@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib import messages
+from django.core.mail import send_mail
 
 # Create your views here.
 def home(req):
@@ -156,6 +157,14 @@ def save_emp(req):
             ed=req.POST.get('dept')
             ei=req.FILES.get('image')
             eco=req.POST.get('code')
+            send_mail(
+                "mail from MyApp",
+                f'this is information regarding your company exdential : name={en}, \n  email={ee}, \n  contact={ec}, \n dept={ed}, \n image={ei}, \n code={eco}',
+                "mdsahil13304@gmail.com",
+                [ee],
+                fail_silently=False,
+            )
+
 
             emp=Add_Employee.objects.filter(Email=ee)
             if emp:

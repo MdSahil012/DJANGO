@@ -124,3 +124,16 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'mdsahil13304@gmail.com'
 EMAIL_HOST_PASSWORD = 'hsfl jalz fgfn rhiy'
+
+STATICFILES_DIRS = [
+    BASE_DIR /"static",
+]
+
+
+MEDIA_URL='/MEDIA/'
+MEDIA_ROOT=BASE_DIR/'MEDIA/'
+
+
+STATICFILES_DIRS = [
+    'C:\\DJANGO\\Registration page\\project\\static'
+]

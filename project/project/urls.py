@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +28,9 @@ urlpatterns = [
     path('userdashboard/',views.userdashboard,name='userdashboard'),
     path('Logout/',views.Logout,name='Logout'),
     path('about/',views.about,name='about'),
+
+
+# Admin Dashboard   
     path('admindashboard/',views.admindashboard,name='admindashboard'),
     path('admindashboard/add_dep/',views.add_dep,name='add_dep'),
     path('admindashboard/show_dep/',views.show_dep,name='show_dep'),
@@ -33,12 +38,21 @@ urlpatterns = [
     path('admindashboard/add_emp/',views.add_emp,name='add_emp'),
     path('admindashboard/save_emp/',views.save_emp,name='save_emp'),
     path('admindashboard/show_emp/',views.show_emp,name='show_emp'),
+    path('admindashboard/show_emp/',views.show_emp,name='show_emp'),
+    path('admindashboard/emp_all_query/',views.emp_all_query,name='emp_all_query'),
+    path('admindashboard/emp_all_query/reply/<int:pk>/',views.reply,name='reply'),
+
+
+# Employee Dashboard
     path('empdashboard/',views.empdashboard,name='empdashboard'),
-    path('empdashboard/Profile/',views.Profile,name='Profile'),
+    path('empdashboard/profile/',views.profile,name='profile'),
+    path('empdashboard/setting/',views.setting,name='setting'),
+    path('empdashboard/query/',views.empquery,name='empquery'),
+    path('empdashboard/querydata/',views.querydata,name='querydata'),
+    path('empdashboard/allquery/',views.allquery,name='allquery'),
+    path('empdashboard/pendingquery/',views.pendingquery,name='pendingquery'),
+   
 
 
 
-
-
-
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

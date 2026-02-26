@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class Employee(models.Model):
     Name=models.CharField(max_length=50)
@@ -27,3 +28,18 @@ class Add_Employee(models.Model):
     Image=models.ImageField(upload_to='image')
     Code=models.CharField(max_length=20)
     Dept=models.CharField(max_length=20)
+
+
+class Query(models.Model):
+    Name=models.CharField(max_length=50)
+    Email=models.EmailField(max_length=50)
+    Department=models.CharField(max_length=40)
+    Query=models.TextField()
+    Status=models.CharField(default="Pending")
+
+class reply(models.Model):
+    Name=models.CharField(max_length=50)
+    Email=models.EmailField()
+    Dept=models.CharField(max_length=40)
+    Query=models.TextField()
+    reply=models.CharField(null=True)

@@ -316,9 +316,12 @@
                   <td>{{ i.Query }}</td>
 
                   <td>
-                      <span class="badge bg-success">
-                          {{ i.Status }}
-                      </span>
+                    
+                      {% if i.reply%}
+                            Done 
+                        {% else %}
+                            {{i.Status}}
+                        {% endif %}
                   </td>
 
                   <td>
@@ -334,7 +337,13 @@
                   </td>
                   <td>
                       <button type="button" class="btn btn-sm btn-outline-danger">
-                        <a href="{% url 'reply' pk=i.id %}"> reply</a>
+                        {% if i.reply %}
+                            {{i.reply}}
+                          {% else %}
+                                <a href="{% url 'reply' pk=i.id %}">reply</a> 
+                           {% endif %}
+
+                        </td>
                         
                       </button>
                   </td>
@@ -354,7 +363,7 @@
         
         <h5 class="mb-3">Reply to Query</h5>
 
-                    <form action="" method="post">
+                    <form action="{% url 'a_reply' pk=q_data.id %}" method="post">
                         {% csrf_token %}
 
                         <div class="mb-3">
@@ -398,7 +407,6 @@
                                     rows="4" 
                                     placeholder="Write your reply here..."></textarea>
                         </div>
-
                         <button type="submit" class="btn btn-primary">
                             Reply
                         </button>

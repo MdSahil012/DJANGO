@@ -122,8 +122,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'mdsahil13304@gmail.com'
-EMAIL_HOST_PASSWORD = 'hsfl jalz fgfn rhiy'
+EMAIL_HOST_USER = 'sa6584129@gmail.com'
+EMAIL_HOST_PASSWORD = 'etyp mver dusa azdh'
 
 STATICFILES_DIRS = [
     BASE_DIR /"static",

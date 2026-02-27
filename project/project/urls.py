@@ -41,6 +41,14 @@ urlpatterns = [
     path('admindashboard/show_emp/',views.show_emp,name='show_emp'),
     path('admindashboard/emp_all_query/',views.emp_all_query,name='emp_all_query'),
     path('admindashboard/emp_all_query/reply/<int:pk>/',views.reply,name='reply'),
+    path('admindashboard/emp_all_query/a_reply/<int:pk>/',views.a_reply,name='a_reply'),
+    path('admindashboard/emp_all_query/a_reply/<int:pk>/',views.a_reply,name='a_reply'),
+    path('admindashboard/emp_all_query/emp_edit/<int:pk>/',views.emp_edit,name='emp_edit'),
+    path('admindashboard/emp_all_query/update_querydata/<int:pk>/',views.update_querydata,name='update_querydata'),
+    path('admindashboard/emp_all_query/deletequery/<int:pk>/',views.deletequery,name='deletequery'),
+
+
+
 
 
 # Employee Dashboard
@@ -51,6 +59,11 @@ urlpatterns = [
     path('empdashboard/querydata/',views.querydata,name='querydata'),
     path('empdashboard/allquery/',views.allquery,name='allquery'),
     path('empdashboard/pendingquery/',views.pendingquery,name='pendingquery'),
+    path('empdashboard/donequery/',views.donequery,name='donequery'),
+    path('empdashboard/allquery/emp_q_edit/<int:pk>/',views.emp_q_edit,name='emp_q_edit'),
+
+    
+
    
 
 

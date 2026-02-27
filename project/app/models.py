@@ -36,10 +36,6 @@ class Query(models.Model):
     Department=models.CharField(max_length=40)
     Query=models.TextField()
     Status=models.CharField(default="Pending")
-
-class reply(models.Model):
-    Name=models.CharField(max_length=50)
-    Email=models.EmailField()
-    Dept=models.CharField(max_length=40)
-    Query=models.TextField()
     reply=models.CharField(null=True)
+
+

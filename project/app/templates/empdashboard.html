@@ -178,15 +178,15 @@
                         <div class="profile-card">
 
                             <!-- Profile Image -->
-                            {% if data.images %}
-                            <img src="{ static data.images.url }" alt="Profile Image" class="profile-img">
+                            {% if data.Image %}
+                            <img src="{{ data.Image.url }}" alt="Profile Image" class="profile-img">
                             {% else %}
                             <img src="https://via.placeholder.com/160" class="profile-img">
                             {% endif %}
 
                             <!-- Name -->
                             <div class="profile-name">{{ data.Name }}</div>
-                            <div class="profile-role">{{ data.Departments }}</div>
+                            <div class="profile-role">{{ data.Department }}</div>
 
                             <hr>
 
@@ -195,7 +195,7 @@
                                 <p><i class="bi bi-envelope-fill"></i><span>Email:</span> {{ data.Email }}</p>
                                 <p><i class="bi bi-telephone-fill"></i><span>Contact:</span> {{ data.Contact }}</p>
                                 <p><i class="bi bi-person-badge-fill"></i><span>Code:</span> {{ data.Code }}</p>
-                                <p><i class="bi bi-building"></i><span>Department:</span> {{ data.Departments }}</p>
+                                <p><i class="bi bi-building"></i><span>Department:</span> {{ data.Department }}</p>
                             </div>
 
                             <!-- Edit Button -->
@@ -308,7 +308,7 @@
 
                             <!-- Name -->
                             <div class="profile-name">{{ data.Name }}</div>
-                            <div class="profile-role">{{ data.Departments }}</div>
+                            <div class="profile-role">{{ data.Department }}</div>
 
                             <hr>
 
@@ -317,7 +317,7 @@
                                 <p><i class="bi bi-envelope-fill"></i><span>Email:</span> {{ data.Email }}</p>
                                 <p><i class="bi bi-telephone-fill"></i><span>Contact:</span> {{ data.Contact }}</p>
                                 <p><i class="bi bi-person-badge-fill"></i><span>Code:</span> {{ data.Code }}</p>
-                                <p><i class="bi bi-building"></i><span>Department:</span> {{ data.Departments }}</p>
+                                <p><i class="bi bi-building"></i><span>Department:</span> {{ data.Department }}</p>
                             </div>
 
                             <!-- Edit Button -->
@@ -431,6 +431,13 @@
 
                             <div class="card shadow p-4">
                                 <h4 class="mb-3">All Queries</h4>
+                                <form action="{% url 'search' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="search" name="search">
+                                    <button type="submit">Search</button>
+                                    <button><a href="{% url 'allquery' %}">Reset</a></button>
+                                </form>
+                                
 
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered table-hover align-middle">
@@ -440,12 +447,11 @@
                                                 <th>S.No</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
-                                                <th>Department</th>
+                                                <th>Departments</th>
                                                 <th>Query</th>
                                                 <th>Status</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
-                                                <th>Reply</th>
 
                                             </tr>
                                         </thead>
@@ -459,39 +465,83 @@
                                                 <td>{{i.Departments}}</td>
                                                 <td>{{i.Query}}</td>
                                                 
-
-                                                <!-- Status Badge -->
-                                                <td>
-                                                    {% if i.Status == "Pending" %}
-                                                    <span class="badge bg-warning text-dark">Pending</span>
-                                                    {% else %}
-                                                    <span class="badge bg-success">Done</span>
-                                                    {% endif %}
-                                                </td>
-
+                                                <td>{{i.Status}}</td>
                                                 <!-- Edit -->
                                                 <td>
-                                                    <a href="{% url 'emp_edit' pk=i.id %}"></a><button class="btn btn-sm btn-primary">Edit</button>
+                                                    
                                                     {% if i.reply %}
-                                                        {{i.reply}}
+                                                    N/A
                                                     {% else %}
-                                                            <a href="{% url 'reply' pk=i.id %}"></a> 
+                                                            <a href="{% url 'edit_all_query' i.id %}">Edit</a> 
                                                     {% endif %}
                                                 </td>
                                                 
 
                                                 <!-- Delete -->
                                                 <td>
-                                                    <a href="{% url 'deletequery' pk=i.id %}"></a><button class="btn btn-sm btn-danger">Delete</button>
+
+                                                    {% if i.reply %}
+                                                    N/A
+                                                    {% else %}
+                                                            <a href="{% url 'emp_q_delete' i.id %}"><button class="btn btn-sm btn-danger">Delete</button></a>
+                                                    {% endif %}
+
+
+
                                                 </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-primary">reply</button>
-                                                </td>
+                                                
                                             </tr>
                                             {% endfor %}
                                         </tbody>
 
                                     </table>
+                                    {% if old_querydata %}
+                                    <form action="{% url 'updated_query' old_querydata.id %}" method="POST"
+                                        class="card p-4 shadow">
+
+                                        {% csrf_token %}
+
+                                        <h4 class="text-center mb-4">Employee Query</h4>
+
+                                        <!-- Name -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input type="text" name="name" value="{{old_querydata.Name}}"
+                                                class="form-control" readonly>
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" value="{{old_querydata.Email}}"
+                                                class="form-control" readonly>
+                                        </div>
+
+                                        <!-- Department -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Department</label>
+                                            <select name="department" class="form-select">
+                                                <option value="">Select Department</option>
+                                                {% for i in emp_Department %}
+                                                <option value="{{i.Departments}}">{{i.Departments}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <!-- Query -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Your Query</label>
+                                            <textarea name="query" class="form-control" rows="4"
+                                                placeholder="Write your query...">{{old_querydata.Query}}</textarea>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+
+                                    </form>
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -510,9 +560,6 @@
                                                 <th>Department</th>
                                                 <th>Query</th>
                                                 <th>Status</th>
-                                                <th>Edit</th>
-                                                <th>Delete</th>
-                                                <th>Reply</th>
 
                                             </tr>
                                         </thead>
@@ -525,35 +572,11 @@
                                                 <td>{{i.Email}}</td>
                                                 <td>{{i.Departments}}</td>
                                                 <td>{{i.Query}}</td>
+                                                <td class="badge bg-warning">{{i.Status}}</td>
                                                 
 
-                                                <!-- Status Badge -->
-                                                <td>
-                                                    {% if i.Status == "Pending" %}
-                                                    <span class="badge bg-warning text-dark">Pending</span>
-                                                    {% else %}
-                                                    <span class="badge bg-success">Done</span>
-                                                    {% endif %}
-                                                </td>
-
-                                                <!-- Edit -->
-                                                <td>
-                                                    <button class="btn btn-sm btn-primary">Edit</button>
-                                                    {% if i.reply %}
-                                                        {{i.reply}}
-                                                    {% else %}
-                                                            <a href="{% url 'reply' pk=i.id %}"></a> 
-                                                    {% endif %}
-                                                </td>
-                                                
-
-                                                <!-- Delete -->
-                                                <td>
-                                                    <button class="btn btn-sm btn-danger">Delete</button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-primary">reply</button>
-                                                </td>
+                                    
+                                             
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -581,7 +604,7 @@
                                         </thead>
 
                                         <tbody>
-                                            {% for i in all_query %}
+                                            {% for i in emp_all_query %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ i.Name }}</td>

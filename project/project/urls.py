@@ -43,9 +43,9 @@ urlpatterns = [
     path('admindashboard/emp_all_query/reply/<int:pk>/',views.reply,name='reply'),
     path('admindashboard/emp_all_query/a_reply/<int:pk>/',views.a_reply,name='a_reply'),
     path('admindashboard/emp_all_query/a_reply/<int:pk>/',views.a_reply,name='a_reply'),
-    path('admindashboard/emp_all_query/emp_edit/<int:pk>/',views.emp_edit,name='emp_edit'),
-    path('admindashboard/emp_all_query/update_querydata/<int:pk>/',views.update_querydata,name='update_querydata'),
-    path('admindashboard/emp_all_query/deletequery/<int:pk>/',views.deletequery,name='deletequery'),
+    # path('admindashboard/emp_all_query/emp_edit/<int:pk>/',views.emp_edit,name='emp_edit'),
+    # path('admindashboard/emp_all_query/update_querydata/<int:pk>/',views.update_querydata,name='update_querydata'),
+    # path('admindashboard/emp_all_query/deletequery/<int:pk>/',views.deletequery,name='deletequery'),
 
 
 
@@ -60,11 +60,11 @@ urlpatterns = [
     path('empdashboard/allquery/',views.allquery,name='allquery'),
     path('empdashboard/pendingquery/',views.pendingquery,name='pendingquery'),
     path('empdashboard/donequery/',views.donequery,name='donequery'),
-    path('empdashboard/allquery/emp_q_edit/<int:pk>/',views.emp_q_edit,name='emp_q_edit'),
+    path('empdashboard/edit_all_query/<int:pk>/',views.edit_all_query,name='edit_all_query'),
+    path('empdashboard/updated_query/<int:pk>/', views.updated_query, name='updated_query'),
+    path('empdashboard/emp_q_delete/<int:id>/', views.emp_q_delete, name='emp_q_delete'),
+    path('empdashboard/allquery/search/', views.search, name='search'),
 
-    
-
-   
 
 
 

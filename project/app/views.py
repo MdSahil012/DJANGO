@@ -227,6 +227,7 @@ def a_reply(req,pk):
         if req.method == 'POST':
             ar=req.POST.get('reply')
             q_old_data.reply=ar
+            q_old_data.Status="Done"
             q_old_data.save()
         q_data=Query.objects.get(id=pk)
         emp_all_query=Query.objects.all()
@@ -278,7 +279,7 @@ def querydata(req):
             e = req.POST.get('email')
             d = req.POST.get('department')
             q = req.POST.get('query')
-            Query.objects.create(Name=n,Email=e,Department=d,Query=q)
+            Query.objects.create(Name=n,Email=e,Departments=d,Query=q)
             messages.success(req, "Query created....")
             e_id = req.session.get('emp_id')
             emp_data = Add_Employee.objects.get(id=e_id)
@@ -303,7 +304,7 @@ def pendingquery(req):
     if 'emp_id' in req.session:
         e_id = req.session.get('emp_id')
         emp_data = Add_Employee.objects.get(id=e_id)
-        pending = Query.objects.filter(Email=emp_data.Email)
+        pending = Query.objects.filter(Email=emp_data.Email , Status="Pending")
         return render(req,'empdashboard.html',{'data':emp_data , 'pendingquery':True, 'pending':pending})
     else:
         return redirect('Login')
@@ -312,69 +313,88 @@ def donequery(req):
     if 'emp_id' in req.session:
         e_id = req.session.get('emp_id')
         emp_data = Add_Employee.objects.get(id=e_id)
-        done = Query.objects.filter(Email=emp_data.Email).exclude(reply=None)
-        return render(req,'empdashboard.html',{'data':emp_data , 'donequery':True, 'done':done})
+        emp_all_query = Query.objects.filter(Email=emp_data.Email , Status="Done")
+        return render(req,'empdashboard.html',{'data':emp_data , 'donequery':True, 'emp_all_query':emp_all_query})
     else:
         return redirect('Login')
 
-def emp_q_edit(req,pk):
+def edit_all_query(req, pk):
     if 'emp_id' in req.session:
-        q_old_data=Query.objects.get(id=pk)
-        if req.method == 'POST':
-            q=req.POST.get('query')
-            q_old_data.Query=q
-            q_old_data.save()
         e_id = req.session.get('emp_id')
         emp_data = Add_Employee.objects.get(id=e_id)
-        pending = Query.objects.filter(Email=emp_data.Email)
-        return render(req,'empdashboard.html',{'data':emp_data , 'pendingquery':True, 'pending':pending})
+        old_querydata = Query.objects.get(id=pk)
+        emp_dept = Department.objects.all()
+        all_query = Query.objects.filter(Email=emp_data.Email)
+        return render(req, 'empdashboard.html', { 'data': emp_data, 'allquery': True, 'old_querydata': old_querydata, 'emp_dept': emp_dept, 'all_query': all_query})
+    else:
+        return redirect('Login')
+
+def updated_query(req, pk):
+    if 'emp_id' in req.session:
+        e_id = req.session.get('emp_id')
+        if req.method == 'POST':
+            d = req.POST.get('department')
+            q = req.POST.get('query')
+            old_q_data = Query.objects.get(id=pk)
+            old_q_data.Departments = d
+            old_q_data.Query = q
+            old_q_data.save()
+            messages.success(req, "Query updated successfully")
+            emp_data = Add_Employee.objects.get(id=e_id)
+            all_query = Query.objects.filter(Email=emp_data.Email)
+            return render(req, 'empdashboard.html', { 'data': emp_data, 'allquery': True, 'all_query': all_query})
     else:
         return redirect('Login')
     
-def emp_edit(req,pk):
-    if 'emp_id' in req.session:
-        emp_old_data=Add_Employee.objects.get(id=pk)
-        if req.method == 'POST':
-            n=req.POST.get('name')
-            c=req.POST.get('contact')
-            emp_old_data.Name=n
-            emp_old_data.Contact=c
-            emp_old_data.save()
-        e_id = req.session.get('emp_id')
-        emp_data = Add_Employee.objects.get(id=e_id)
-        return render(req,'empdashboard.html',{'data':emp_data , 'profile':True})
-    else:
-        return redirect('Login')
-
-def update_querydata(req,pk):
-    if 'emp_id' in req.session:
-        q_old_data=Query.objects.get(id=pk)
-        emp_id= req.session.get('emp_id')
-        emp_data=Add_Employee.objects.get(id=emp_id)
-        new_d=req.POST.get('Department')
-        new_q=req.POST.get('query')
-        q_old_data.Department=new_d
-        q_old_data.Query=new_q
-        q_old_data.save()
-        all_query=Query.objects.all()
-        return render(req,'empdashboard.html',{'data':emp_data , 'allquery':True, 'all_query':all_query})
-
-    else:
-        return redirect('Login')
+    
     
 
-def deletequery(req,pk):
+
+
+# def emp_q_delete(req, id):
+#     if 'emp_id' in req.session:
+#         e_id = req.session.get('emp_id')
+#         emp_data = AddEmployee.objects.get(id=e_id)
+#         check_query = Query.objects.get(id=id)
+#         check_query.delete()
+#         all_query = Query.objects.filter(Email=emp_data.Email)
+#         messages.success(req, 'Query deleted')
+#         return render(req, 'empdeshbord.html', { 'data': emp_data, 'allquery': True, 'all_query': all_query
+#         })
+#     else:
+#         return redirect('Login')
+
+
+def emp_q_delete(req, id):
     if 'emp_id' in req.session:
-        q_old_data=Query.objects.get(id=pk)
-        q_old_data.delete()
-        emp_id= req.session.get('emp_id')
-        emp_data=Add_Employee.objects.get(id=emp_id)
-        all_query=Query.objects.filter(Email=emp_data.Email)
-        return render(req,'empdashboard.html',{'data':emp_data , 'allquery':True, 'all_query':all_query})
+        e_id = req.session.get('emp_id')
+        emp_data = Add_Employee.objects.get(id=e_id)
+        q = Query.objects.filter(id=id).first()
+        if q:
+            q.delete()
+            messages.success(req, "Query deleted successfully")
+        else:
+            messages.warning(req, "Query already deleted")
+        return redirect('empdashboard')
 
     else:
         return redirect('Login')
 
+def search(req):
+    if 'emp_id' in req.session:
+        e_id = req.session.get('emp_id')
+        emp_data = Add_Employee.objects.get(id=e_id) 
+        if req.method == 'POST':
+            s = req.POST.get('search')
+            print(s)
+            # all_query = Query.objects.filter(Email=emp_data.Email,Query = s, Departments=s)
+            # all_query = Query.objects.filter(Email=emp_data.Email,Query = s)
+            all_query = Query.objects.filter(Email__icontains=emp_data.Email,Query__icontains = s)
+            
+            
+            return render(req,'empdashboard.html',{'data':emp_data , 'allquery':True, 'all_query':all_query})
+    else:
+        return redirect('Login')
 
 def Logout(req):
     if 'user_id' in req.session:

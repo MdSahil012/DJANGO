@@ -33,7 +33,7 @@ class Add_Employee(models.Model):
 class Query(models.Model):
     Name=models.CharField(max_length=50)
     Email=models.EmailField(max_length=50)
-    Department=models.CharField(max_length=40)
+    Departments=models.CharField(max_length=40)
     Query=models.TextField()
     Status=models.CharField(default="Pending")
     reply=models.CharField(null=True)
